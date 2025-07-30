@@ -2,10 +2,12 @@ cask "noports" do
   arch arm: "arm64", intel: "x64"
   os macos: "macos", linux: "linux"
   version 'v5.11.2'
+
   macos_arm_sha = "13c384ad74aab82e8d7a81d83abc18d72a76ddaca80b53d32a87cbdd623dd8b9"
   macos_x64_sha = "2b1619065faac9c7750a17f1b04fe2b2b9b91226de90c1e0554fb0ffc400bf13"
   linux_arm_sha = "77ec1651b5121068045e898b4d6ce0a1f8b2651bc72d5c1eb5d802aec3d1061b"
   linux_x64_sha = "8afd8689841861d94bddf122b7053fc1207960f2f58851bfd532bf6022a3525d"
+
   on_macos do
     on_arm do
       sha256 macos_arm_sha
@@ -41,6 +43,7 @@ cask "noports" do
       next if match.blank?
       match[1]
     end
+  end
  
   depends_on formula: "ca-certificates"
 
