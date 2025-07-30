@@ -30,21 +30,6 @@ cask "noports" do
   desc "Cli binaries for noports (https://noports.com)"
   homepage "https://noports.com"
 
-  livecheck do
-    # Checks if noports has a new latest release
-    url :stable
-    # regex match parts:
-    # A single "v<number>"
-    # Followed by any count of ".<number>"
-    # Followed by an optional "+<number>"
-    regex(/^(v\d+(?:\.\d+)+(?:\+\d+)?)/i)
-    strategy :github_latest do |json, regex|
-      match = json["tag_name"]&.match(regex)
-      next if match.blank?
-      match[1]
-    end
-  end
- 
   depends_on formula: "ca-certificates"
 
   binary "sshnp/at_activate"
