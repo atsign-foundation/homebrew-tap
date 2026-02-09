@@ -12,7 +12,7 @@ cask "noports" do
   # They are automatically updated by: .github/workflows/multibuild.yaml
 
   on_macos do
-    ext = "zip"
+    ext 'zip'
     on_arm do
       sha256 macos_arm_sha
     end
@@ -21,7 +21,7 @@ cask "noports" do
     end
   end
   on_linux do
-    ext = "tgz"
+    ext 'tgz'
     on_arm do
       sha256 linux_arm_sha
     end
