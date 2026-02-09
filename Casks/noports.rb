@@ -12,6 +12,7 @@ cask "noports" do
   # They are automatically updated by: .github/workflows/multibuild.yaml
 
   on_macos do
+    ext = "zip"
     on_arm do
       sha256 macos_arm_sha
     end
@@ -20,6 +21,7 @@ cask "noports" do
     end
   end
   on_linux do
+    ext = "tgz"
     on_arm do
       sha256 linux_arm_sha
     end
@@ -28,7 +30,7 @@ cask "noports" do
     end
   end
  
-  url "https://github.com/atsign-foundation/noports/releases/download/#{version}/sshnp-#{os}-#{arch}.zip"
+  url "https://github.com/atsign-foundation/noports/releases/download/#{version}/sshnp-#{os}-#{arch}.#{ext}"
   name "noports"
   desc "Make your devices invisible (https://noports.com)"
   homepage "https://noports.com"
