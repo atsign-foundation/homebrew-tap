@@ -11,8 +11,9 @@ cask "noports" do
   # N.B. Be careful about the formatting in the above lines.
   # They are automatically updated by: .github/workflows/multibuild.yaml
 
+  ext = OS.mac? ? "zip" : "tgz"
+
   on_macos do
-    ext 'zip'
     on_arm do
       sha256 macos_arm_sha
     end
@@ -21,7 +22,6 @@ cask "noports" do
     end
   end
   on_linux do
-    ext 'tgz'
     on_arm do
       sha256 linux_arm_sha
     end
