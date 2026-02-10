@@ -8,7 +8,7 @@ cask "noports" do
   # N.B. Be careful about the formatting in the above lines.
   # They are automatically updated by: .github/workflows/multibuild.yaml
 
-  url "https://github.com/atsign-foundation/noports/releases/download/#{version}/sshnp-#{os}-#{arch}.zip"
+  url "https://github.com/atsign-foundation/noports/releases/download/#{version}/sshnp-macos-#{arch}.zip"
   name "noports"
   desc "Make your devices invisible (https://noports.com)"
   homepage "https://noports.com"
