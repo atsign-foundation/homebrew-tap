@@ -6,6 +6,8 @@
 
 # NoPorts with Homebrew
 
+Presently MacOS only.
+
 ```sh
 brew tap atsign-foundation/homebrew-tap
 brew install noports
