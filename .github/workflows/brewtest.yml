@@ -1,0 +1,37 @@
+name: Homebrew Install Test
+
+on:
+  push:
+    branches: [ trunk ]
+  workflow_dispatch: 
+
+permissions:
+  contents: read
+
+jobs:
+  test-brew-install:
+    strategy:
+      matrix:
+        # macos-13 is the last Intel-based runner
+        # macos-latest is Apple Silicon (ARM64)
+        os: [macos-13, macos-latest]
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+
+      - name: Install Package from Homebrew
+        run: |
+          brew tap atsign-foundation/homebrew-tap
+          brew install jq
+
+      - name: Display Architecture and Version
+        run: |
+          echo "Currently running on:"
+          uname -m
+          
+          echo "Binary path:"
+          which sshnp
+          
+          echo "Package version info:"
+          sshnp --version
