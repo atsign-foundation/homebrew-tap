@@ -12,9 +12,7 @@ jobs:
   test-brew-install:
     strategy:
       matrix:
-        # macos-13 is the last Intel-based runner
-        # macos-latest is Apple Silicon (ARM64)
-        os: [macos-13, macos-latest]
+        os: [macos-15-intel, macos-latest]
     
     runs-on: ${{ matrix.os }}
     
@@ -23,7 +21,7 @@ jobs:
       - name: Install Package from Homebrew
         run: |
           brew tap atsign-foundation/homebrew-tap
-          brew install jq
+          brew install noports
 
       - name: Display Architecture and Version
         run: |
