@@ -32,4 +32,4 @@ jobs:
           which sshnp
           
           echo "Package version info:"
-          sshnp --version
+          sshnp --help
