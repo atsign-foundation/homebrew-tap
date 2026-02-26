@@ -1,14 +1,14 @@
 cask "noports" do
   arch arm: "arm64", intel: "x64"
 
-  version 'v5.14.5'
-  sha256 arm:   "892e229e17557aea2eb17318ee11c2ae5955ea84942c847d013e23818c018193",
-         intel: "355b55a71213dbd2f92228b8d89527f9739ae5e2dcd4de3cfec9a423c6933c01"
+  version '5.14.7'
+  sha256 arm:   "ef32114fa66f106685686fe8fc516e8bf1a2c1c81f94ef3c0a9c24acf9a0bd30",
+         intel: "a81bdadd8eb415bc113e74b72665bbf2f548d2a7dff9e56e427e1a9a76912e68"
 
   # N.B. Be careful about the formatting in the above lines.
   # They are automatically updated by: .github/workflows/multibuild.yaml
 
-  url "https://github.com/atsign-foundation/noports/releases/download/#{version}/sshnp-macos-#{arch}.zip"
+  url "https://github.com/atsign-foundation/noports/releases/download/v#{version}/sshnp-macos-#{arch}.zip"
   name "noports"
   desc "Make your devices invisible (https://noports.com)"
   homepage "https://noports.com"
@@ -16,15 +16,15 @@ cask "noports" do
   depends_on formula: "ca-certificates"
 
   binary "sshnp/at_activate"
-  binary "sshnp/srv"
+  binary "sshnp/noports"
+  binary "sshnp/npp_atserver"
+  binary "sshnp/npp_file"
   binary "sshnp/npt"
+  binary "sshnp/srv"
   binary "sshnp/sshnp"
   binary "sshnp/sshnpd"
   binary "sshnp/srvd"
-  binary "sshnp/npp_atserver"
-  binary "sshnp/npp_file"
-  binary "sshnp/npa_file"
-
+  
   service "sshnp/launchd/com.atsign.sshnpd.plist"
   artifact "sshnp/config/sshnpd.yaml",
     target: "~/Library/Application Support/Noports/sshnpd.yaml"
