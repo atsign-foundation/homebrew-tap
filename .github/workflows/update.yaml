@@ -1,7 +1,7 @@
 name: Update Cask
 on:
   repository_dispatch:
-    types: [update-formula]
+    types: [new-release]
   workflow_dispatch: # Allows manual "Sync to Latest" button
 
 permissions:
