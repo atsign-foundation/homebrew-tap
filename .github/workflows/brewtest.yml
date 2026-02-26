@@ -32,4 +32,4 @@ jobs:
           which noports
           
           echo "Package version info:"
-          noports --version
+          sshnp --version
