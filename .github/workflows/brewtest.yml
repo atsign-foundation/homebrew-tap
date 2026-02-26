@@ -29,7 +29,7 @@ jobs:
           uname -m
           
           echo "Binary path:"
-          which sshnp
+          which noports
           
           echo "Package version info:"
-          sshnp --help
+          noports --version
