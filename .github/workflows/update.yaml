@@ -1,4 +1,4 @@
-name: Update Formula
+name: Update Cask
 on:
   repository_dispatch:
     types: [update-formula]
@@ -22,7 +22,6 @@ jobs:
           GH_TOKEN: ${{ github.token }} # Standard token is fine for public gh lookups
           SOURCE_REPO: "atsign-foundation/noports"
         run: |
-          # 1. Determine Version
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "Manual trigger: Fetching latest stable release version..."
             VERSION=$(gh release view --repo $SOURCE_REPO --json tagName --template '{{.tagName}}')
@@ -34,22 +33,21 @@ jobs:
           echo "Using Version: $VERSION"
           echo "version_raw=${VERSION#v}" >> $GITHUB_OUTPUT
           
-          # 2. Define Download URLs (Matching your artifact naming)
-          URL_INTEL="https://github.com/$SOURCE_REPO/releases/download/$VERSION/sshnp-macos-x64.tar.gz"
-          URL_ARM="https://github.com/$SOURCE_REPO/releases/download/$VERSION/sshnp-macos-arm64.tar.gz"
+          URL_CHECKSUMS="https://github.com/$SOURCE_REPO/releases/download/$VERSION/checksums.txt"
           
-          # 3. Calculate Checksums
-          echo "Calculating SHAs..."
-          SHA_INTEL=$(curl -L "$URL_INTEL" | sha256sum | awk '{print $1}')
-          SHA_ARM=$(curl -L "$URL_ARM" | sha256sum | awk '{print $1}')
+          echo "Fetching SHAs..."
+          SHA_INTEL=$(curl -fsSL "$URL_CHECKSUMS" | grep macos-x64 | awk '{print $1}')
+          SHA_ARM=$(curl -fsSL "$URL_CHECKSUMS" | grep macos-arm64 | awk '{print $1}')
           
+          echo "Intel SHA is ${SHA_INTEL}"
           echo "sha_intel=$SHA_INTEL" >> $GITHUB_OUTPUT
+          echo "Arm SHA is ${SHA_ARM}"
           echo "sha_arm=$SHA_ARM" >> $GITHUB_OUTPUT
 
       - name: Update Cask File
         run: |
           CASK="Casks/noports.rb"
-          VERSION="${{ steps.metadata.outputs.version }}"
+          VERSION="${{ steps.metadata.outputs.version_raw }}"
           SHA_INTEL="${{ steps.metadata.outputs.sha_intel }}"
           SHA_ARM="${{ steps.metadata.outputs.sha_arm }}"
 
