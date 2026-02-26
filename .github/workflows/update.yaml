@@ -1,0 +1,71 @@
+name: Update Formula
+on:
+  repository_dispatch:
+    types: [update-formula]
+  workflow_dispatch: # Allows manual "Sync to Latest" button
+
+permissions:
+  contents: read
+
+jobs:
+  homebrew:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Tap
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Resolve Version and SHAs
+        id: metadata
+        env:
+          GH_TOKEN: ${{ github.token }} # Standard token is fine for public gh lookups
+          SOURCE_REPO: "atsign-foundation/noports"
+        run: |
+          # 1. Determine Version
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Manual trigger: Fetching latest stable release version..."
+            VERSION=$(gh release view --repo $SOURCE_REPO --json tagName --template '{{.tagName}}')
+          else
+            echo "Dispatch trigger: Using version from payload."
+            VERSION="${{ github.event.client_payload.version }}"
+          fi
+          
+          echo "Using Version: $VERSION"
+          echo "version_raw=${VERSION#v}" >> $GITHUB_OUTPUT
+          
+          # 2. Define Download URLs (Matching your artifact naming)
+          URL_INTEL="https://github.com/$SOURCE_REPO/releases/download/$VERSION/sshnp-macos-x64.tar.gz"
+          URL_ARM="https://github.com/$SOURCE_REPO/releases/download/$VERSION/sshnp-macos-arm64.tar.gz"
+          
+          # 3. Calculate Checksums
+          echo "Calculating SHAs..."
+          SHA_INTEL=$(curl -L "$URL_INTEL" | sha256sum | awk '{print $1}')
+          SHA_ARM=$(curl -L "$URL_ARM" | sha256sum | awk '{print $1}')
+          
+          echo "sha_intel=$SHA_INTEL" >> $GITHUB_OUTPUT
+          echo "sha_arm=$SHA_ARM" >> $GITHUB_OUTPUT
+
+      - name: Update Cask File
+        run: |
+          CASK="Casks/noports.rb"
+          VERSION="${{ steps.metadata.outputs.version }}"
+          SHA_INTEL="${{ steps.metadata.outputs.sha_intel }}"
+          SHA_ARM="${{ steps.metadata.outputs.sha_arm }}"
+
+          # Update Version
+          sed -i "s/version '.*'/version '$VERSION'/" $CASK
+          
+          # Update ARM SHA (looks for arm: "..." and replaces the hex)
+          sed -i "s/arm: *\"[a-f0-9]*\"/arm:  \"$SHA_ARM\"/" $CASK
+          
+          # Update Intel SHA (looks for intel: "..." and replaces the hex)
+          sed -i "s/intel: *\"[a-f0-9]*\"/intel: \"$SHA_INTEL\"/" $CASK
+
+      - name: Commit and Push
+        run: |
+          git config user.name "Atsign Robot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          # Only commit if there are actually changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update NoPorts to v${{ steps.metadata.outputs.version_raw }}" && git push)
