@@ -1,9 +1,9 @@
 cask "noports" do
   arch arm: "arm64", intel: "x64"
 
-  version '5.14.7'
-  sha256 arm:   "ef32114fa66f106685686fe8fc516e8bf1a2c1c81f94ef3c0a9c24acf9a0bd30",
-         intel: "a81bdadd8eb415bc113e74b72665bbf2f548d2a7dff9e56e427e1a9a76912e68"
+  version '5.14.8'
+  sha256 arm:  "5b110dbf8bceb92afe678c38efe169ff419fe7a240988b5652ac36f356512244",
+         intel: "31a79f37d2190296c6a7c1dd79c7a2b8461bf2ef5265a024e03050770363b7d7"
 
   # N.B. Be careful about the formatting in the above lines.
   # They are automatically updated by: .github/workflows/multibuild.yaml
