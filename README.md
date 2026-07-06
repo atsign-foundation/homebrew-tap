@@ -8,6 +8,15 @@
 
 Presently MacOS only.
 
+For brew 6:
+
+```sh
+brew tap --trust atsign-foundation/homebrew-tap
+brew install noports
+```
+
+or for earlier brew:
+
 ```sh
 brew tap atsign-foundation/homebrew-tap
 brew install noports
